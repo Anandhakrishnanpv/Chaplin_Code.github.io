@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaplin_Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        /* ======== GLOBAL STYLES ======== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --terminal-green: #00ff41;
+            --matrix-green: #0fff50;
+            --dark-bg: #0a0a12;
+            --darker-bg: #050510;
+            --panel-bg: rgba(10, 15, 20, 0.85);
+            --text-color: #e0e0e0;
+            --glow: rgba(0, 255, 100, 0.7);
+            --error-red: #ff003c;
+            --warning-yellow: #ffdd00;
+            --success-color: #0fff50;
+            --transition-speed: 0.3s;
+            --blood-red: #8a0303;
+        }
+        
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        /* ======== MATRIX BACKGROUND ======== */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.3;
+        }
+                /* Add to your header style */
+        header {
+            position: relative; /* Add this */
+            /* ... existing styles ... */
+        }
+        
+        /* ======== LOADER ======== */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease-out;
+        }
+        
+        .cyber-loader {
+            width: 80%;
+            max-width: 600px;
+            background: rgba(5, 10, 15, 0.9);
+            border: 1px solid var(--terminal-green);
+            box-shadow: 0 0 20px rgba(0, 255, 100, 0.3);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+        
+        .loader-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--terminal-green);
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+        
+        .loader-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--terminal-green);
+            letter-spacing: 2px;
+        }
+        
+        .loader-status {
+            color: var(--warning-yellow);
+            font-size: 0.9rem;
+        }
+        
+        .loader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .loader-quote {
+            font-style: italic;
+            color: var(--terminal-green);
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            border: 2px solid var(--terminal-green);
+            background: rgba(0, 20, 10, 0.3);
+            border-radius: 8px;
+            font-size: 1.4rem;
+            line-height: 1.6;
+            max-width: 90%;
+            box-shadow: 0 0 15px rgba(0, 255, 100, 0.3);
+        }
+        
+        .progress-container {
+            height: 20px;
+            width: 100%;
+            background: rgba(0, 20, 15, 0.5);
+            border: 1px solid var(--terminal-green);
+            position: relative;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0, 255, 100, 0.8),
+                rgba(0, 255, 100, 0.8) 10px,
+                rgba(0, 200, 80, 0.8) 10px,
+                rgba(0, 200, 80, 0.8) 20px
+            );
+            transition: width 2s ease-in-out;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        /* ======== HEADER SCOREBOARD ======== */
+        .header-scoreboard {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(10, 20, 30, 0.8);
+            border: 1px solid var(--terminal-green);
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin: 1.5rem auto 0;
+            width: fit-content;
+            box-shadow: 0 0 15px rgba(0, 255, 100, 0.2);
+        }
+        
+        .header-scoreboard i {
+            color: var(--warning-yellow);
+            font-size: 1.4rem;
+        }
+        
+        .header-scoreboard .score-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--warning-yellow);
+        }
+        
+        .header-scoreboard #score {
+            font-size: 1.8rem;
+            color: var(--terminal-green);
+            font-weight: bold;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        /* ======== MAIN CONTENT ======== */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        header {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(10, 15, 25, 0.85);
+            border: 1px solid var(--terminal-green);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(0, 255, 100, 0.2);
+            border-radius: 8px;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--terminal-green);
+            text-shadow: 0 0 10px var(--glow);
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            animation: flicker 6s infinite alternate;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            color: #b0b0b0;
+            text-shadow: 0 0 5px rgba(0, 255, 100, 0.3);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.4;
+            padding: 0 1rem;
+        }
+        
+        .terminal-line {
+            display: inline-block;
+            width: 10px;
+            height: 1.8rem;
+            background: var(--terminal-green);
+            margin-left: 5px;
+            vertical-align: middle;
+            animation: blink 1s infinite;
+        }
+        
+        /* ======== PUZZLES CONTAINER ======== */
+        #puzzles-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .puzzle {
+            background: var(--panel-bg);
+            border: 1px solid var(--terminal-green);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 20, 10, 0.4);
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 350px;
+        }
+        
+        .puzzle:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0, 255, 100, 0.3);
+        }
+        
+        .locked {
+            filter: grayscale(80%) brightness(40%);
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        .locked::after {
+            content: "🔒 ACCESS DENIED";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px var(--glow);
+            z-index: 2;
+            color: var(--error-red);
+            font-family: 'VT323', monospace;
+            letter-spacing: 2px;
+            text-align: center;
+            width: 100%;
+            animation: flickerRed 2s infinite;
+        }
+        
+        .puzzle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(0, 255, 100, 0.3);
+        }
+        
+        .puzzle-number {
+            font-family: 'VT323', monospace;
+            font-size: 1.8rem;
+            color: var(--terminal-green);
+            letter-spacing: 1px;
+        }
+        
+        .puzzle-status {
+            font-size: 0.9rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 3px;
+            background: rgba(0, 30, 15, 0.6);
+            border: 1px solid var(--terminal-green);
+        }
+        
+        .puzzle-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--matrix-green);
+            margin-bottom: 1.2rem;
+            letter-spacing: 1px;
+        }
+        
+        .puzzle-content {
+            margin-bottom: 1.2rem;
+            flex-grow: 1;
+            padding: 1rem;
+            background: rgba(5, 10, 15, 0.5);
+            border: 1px solid rgba(0, 100, 50, 0.5);
+            border-radius: 4px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            overflow-y: auto;
+            max-height: 180px;
+        }
+        
+        .puzzle-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .puzzle-content::-webkit-scrollbar-track {
+            background: rgba(0, 20, 10, 0.3);
+        }
+        
+        .puzzle-content::-webkit-scrollbar-thumb {
+            background: var(--terminal-green);
+            border-radius: 3px;
+        }
+        
+        .puzzle-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 0.8rem 1rem;
+            background: rgba(5, 10, 15, 0.8);
+            border: 1px solid var(--terminal-green);
+            border-radius: 4px;
+            color: var(--text-color);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1rem;
+            transition: all var(--transition-speed);
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--glow);
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            background: rgba(0, 30, 15, 0.7);
+            border: 1px solid var(--terminal-green);
+            border-radius: 4px;
+            color: var(--text-color);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+        
+        button:hover {
+            background: rgba(0, 60, 30, 0.9);
+            box-shadow: 0 0 15px var(--glow);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        /* ======== TERMINAL EFFECTS ======== */
+        .terminal-line-effect {
+            position: fixed;
+            top: 0;
+            height: 2px;
+            background: var(--terminal-green);
+            box-shadow: 0 0 10px var(--glow);
+            z-index: -1;
+            animation: scan 8s linear infinite;
+        }
+        
+        /* ======== CONFETTI ======== */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+        }
+        
+        /* ======== INSTRUCTION MODAL ======== */
+        #instruction-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 10, 15, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            padding: 1rem;
+        }
+        
+        #instruction-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .instruction-content {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(10, 20, 30, 0.95);
+            border: 2px solid var(--terminal-green);
+            border-radius: 8px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0, 255, 100, 0.4);
+            position: relative;
+            overflow: hidden;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .instruction-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 50%, rgba(0, 255, 100, 0.05) 50%),
+                linear-gradient(transparent 50%, rgba(0, 255, 100, 0.05) 50%);
+            background-size: 20px 20px;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+        
+        .instruction-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--terminal-green);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px var(--glow);
+            line-height: 1.2;
+        }
+        
+        .instruction-list {
+            text-align: left;
+            margin: 1.5rem 0;
+            padding: 0 1.5rem;
+        }
+        
+        .instruction-item {
+            margin-bottom: 1.2rem;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .instruction-item:before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: var(--terminal-green);
+            font-weight: bold;
+        }
+        
+        .instruction-close {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: rgba(0, 40, 20, 0.8);
+            border: 1px solid var(--terminal-green);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+        
+        .instruction-close:hover {
+            background: rgba(0, 60, 30, 0.9);
+            box-shadow: 0 0 15px var(--glow);
+        }
+        
+        /* ======== FINAL PUZZLE (LEVEL 12) ======== */
+        #puzzle-12 {
+            border: 1px solid var(--blood-red);
+            box-shadow: 0 0 15px rgba(138, 3, 3, 0.4);
+            background: rgba(20, 5, 5, 0.85);
+        }
+        
+        #puzzle-12:hover {
+            box-shadow: 0 5px 25px rgba(138, 3, 3, 0.6);
+        }
+        
+        #puzzle-12 .puzzle-header {
+            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+        }
+        
+        #puzzle-12 .puzzle-number {
+            color: var(--blood-red);
+        }
+        
+        #puzzle-12 .puzzle-title {
+            color: #ff4d4d;
+        }
+        
+        #puzzle-12 .puzzle-content {
+            border: 1px solid rgba(100, 0, 0, 0.5);
+            background: rgba(15, 5, 5, 0.5);
+        }
+        
+        #puzzle-12 input[type="text"] {
+            border: 1px solid var(--blood-red);
+        }
+        
+        #puzzle-12 button {
+            background: rgba(60, 10, 15, 0.7);
+            border: 1px solid var(--blood-red);
+        }
+        
+        #puzzle-12 button:hover {
+            background: rgba(90, 15, 20, 0.9);
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.5);
+        }
+        
+        /* ======== RESTART BUTTON IN FOOTER ======== */
+        footer {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background: rgba(10, 15, 25, 0.85);
+            border: 1px solid var(--terminal-green);
+            border-radius: 8px;
+            margin-top: 2rem;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .restart-btn {
+            padding: 10px 20px;
+            background: rgba(10, 20, 30, 0.8);
+            border: 1px solid var(--error-red);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+        
+        .restart-btn:hover {
+            background: rgba(60, 10, 15, 0.9);
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        /* ======== INSTRUCTION BUTTON ======== */
+        .instruction-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: rgba(10, 20, 30, 0.8);
+            border: 1px solid var(--warning-yellow);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            z-index: 500;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .instruction-btn:hover {
+            background: rgba(40, 30, 10, 0.9);
+            box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
+        }
+        
+        /* ======== CONFIRMATION DIALOG ======== */
+        #confirmation-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 10, 15, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 1rem;
+        }
+        
+        #confirmation-dialog.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .dialog-content {
+            background: rgba(10, 20, 30, 0.95);
+            border: 2px solid var(--terminal-green);
+            border-radius: 8px;
+            padding: 2.5rem;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 0 40px rgba(0, 255, 100, 0.4);
+        }
+        
+        .dialog-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: var(--terminal-green);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .dialog-message {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .dialog-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .dialog-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            min-width: 120px;
+        }
+        
+        .dialog-btn.confirm {
+            background: var(--error-red);
+            color: white;
+        }
+        
+        .dialog-btn.cancel {
+            background: rgba(0, 30, 15, 0.7);
+            color: var(--text-color);
+            border: 1px solid var(--terminal-green);
+        }
+        
+        .dialog-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        /* Add to your CSS */
+        .music-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 12px 20px;
+            background: rgba(10, 20, 30, 0.8);
+            border: 1px solid var(--warning-yellow);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            z-index: 500;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-btn:hover {
+            background: rgba(40, 30, 10, 0.9);
+            box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
+        }
+
+        .music-btn.playing {
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .music-btn.playing i {
+            color: var(--success-color);
+        }
+        
+        /* ======== ANIMATIONS ======== */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow: 0 0 10px var(--glow);
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                text-shadow: 0 0 5px var(--glow);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes flickerRed {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.4;
+            }
+        }
+        
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100vh; }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* ======== MATRIX EFFECT ======== */
+        .matrix-char {
+            position: absolute;
+            color: var(--terminal-green);
+            font-size: 18px;
+            font-family: 'VT323', monospace;
+            opacity: 0.9;
+            text-shadow: 0 0 5px var(--glow);
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        /* ======== RESPONSIVE ======== */
+        @media (max-width: 1200px) {
+            #puzzles-container {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+        
+        @media (max-width: 992px) {
+            #puzzles-container {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            #puzzles-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .loader-title {
+                font-size: 1.5rem;
+            }
+            
+            .loader-quote {
+                font-size: 1.2rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .final-input-group {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .puzzle-input {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            .cyber-loader {
+                padding: 1.5rem;
+            }
+            
+            .loader-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .instruction-content {
+                padding: 1.5rem;
+            }
+            
+            .instruction-item {
+                padding-left: 1rem;
+            }
+            
+            .dialog-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .dialog-btn {
+                width: 100%;
+            }
+            
+            .instruction-btn {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .puzzle {
+                padding: 1rem;
+                min-height: 320px;
+            }
+            
+            .puzzle-title {
+                font-size: 1.2rem;
+            }
+            
+            .puzzle-content {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Background -->
+    <div id="matrix-bg"></div>
+    
+    <!-- Instruction Button -->
+    <button class="instruction-btn" id="instruction-button">
+        <i class="fas fa-info-circle"></i> INSTRUCTIONS
+    </button>
+
+    <audio id="bg-music" loop>
+    <source src="./music/The Last Masquerade.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Cyber Loader -->
+    <div id="loader">
+        <div class="cyber-loader">
+            <div class="loader-header">
+                <div class="loader-title">ASYLUM ESCAPE INITIALIZING</div>
+                <div class="loader-status">SECURE CONNECTION</div>
+            </div>
+            <div class="loader-content">
+                <div class="loader-quote">
+                    "The only way to discover the limits of the possible is to go beyond them into the impossible."<br>- Arthur C. Clarke
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+                <div class="progress-text" id="progress-text">0%</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+    
+    <!-- Main Content -->
+    <div id="main-content">
+        <header>
+            <h1>CHAPLIN CODE <span class="terminal-line"></span></h1>
+            <div class="subtitle">"A __________ __________ of __________ and __________, a __________ fading into __________; a __________ of __________ by a __________, wrapped in __________, __________, and __________."</div>
+            
+            <!-- Header Scoreboard -->
+             <!-- Add this inside your header element, after the subtitle -->
+                <button id="music-toggle" class="music-btn">
+                    <i class="fas fa-play"></i> MUSIC
+                </button>
+            <div class="header-scoreboard">
+                <i class="fas fa-skull"></i>
+                <span class="score-label">SOLVED:</span>
+                <span id="score">0</span>
+                <span class="score-label">/ 12</span>
+            </div>
+        </header>
+        
+        <div id="puzzles-container">
+            <!-- Puzzle 1 -->
+            <div class="puzzle" id="puzzle-1">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #01 (myyux://)</div>
+                    <div class="puzzle-status">ACTIVE</div>
+                </div>
+                <div class="puzzle-title">The Encrypted Message</div>
+                <div class="puzzle-content">
+                    <p>Username: "theencryptedmessage""</p>
+                    <p>>> open the Coded Pad</p>
+                      <p>>> Access to the next chamber is encrypted.</p>
+                      <p>>> You must solve the following riddle to retrieve the PASSWORD:</p>
+                      <p>I live in the shadows, </p>
+                      <p>I break with the key, </p>
+                      <p>I'm what protects  </p>
+                      <p>Your identity. </p>
+                      <p>Crack me if you dare...</p>
+                      <p>>> What am I?</p>
+
+                      <p>>> Note:</p>
+                      <p>>> The decryption is *only* the key to move forward...</p>
+                      <p>>> The true answer lies buried in the puzzle.</p>
+                      <p>>> It is not the key... but the *meaning* behind it.</p>
+                      <p>>> This is what we call... the *Chaplin Code*.</p>
+                      <p>Your ultimate aim is to decode the Chaplin Code, which is the combination of all 12 puzzles. and complete the sentance</p>
+                      <p>>> All the best, Operative.</p>
+                      <p>>> Initiating cognitive breach...</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-1" placeholder="Enter decryption key...">
+                    <button onclick="checkAnswer(1)">DECRYPT</button>
+                </div>
+            </div>
+            
+            <!-- Puzzle 2 -->
+            <div class="puzzle locked" id="puzzle-2">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #02 (iwnaj.)</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">Beyond The Pixels</div>
+                <div class="puzzle-content">
+                    <p>What word becomes shorter when you add two letters to it, even though its length increases?.</p>
+                    <p>solve</p>
+                    <p>open: https://drive.google.com/file/d/1qX1OMffLEXGo74MMHK83g9mF9Xc5Jmrf/view?usp=sharing</p>
+
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-2" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+            
+            <!-- Puzzle 3 -->
+            <div class="puzzle locked" id="puzzle-3">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #03 (lttlqj.)</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">Salvator Mundi</div>
+                <div class="puzzle-content">
+                    <p>Find the answer from the image. </p>
+                    <p>open : https://drive.google.com/file/d/1N8kwuxzCXBMxZUEnR6AL1LROe8kEsEvL/view?usp=sharing</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-3" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+            
+            <!-- Puzzle 4 -->
+            <div class="puzzle locked" id="puzzle-4">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #04 (htr/kn)</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">chaos theory
+                </div>
+                <div class="puzzle-content">
+                    <p>I look like...</p>
+                    <p>Open:</p>
+                    <p>https://drive.google.com/file/d/1YGtNHJr8elme7mmlBlikLFzFwv6BTzJj/view?usp=sharing</p>
+                    <p>find the Chaplin code</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-4" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+            
+            <!-- Puzzle 5 -->
+            <div class="puzzle locked" id="puzzle-5">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #05 (qj/i/1)</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">jU57_r3L4x</div>
+                <div class="puzzle-content">
+                    <p>Sum = 13 + 1 + 19 + 17 + 21 + 5 + 18 + 1 + 4 + 5 = ?</p>
+                    <p>find the chaplin code hidden in the number</p>
+                    <p>2 3 5 [1 0 4] 9 1 7 3 3</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-5" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+            
+            <!-- Puzzle 6 -->
+            <div class="puzzle locked" id="puzzle-6">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #06 (V6Vkpm)</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">Latitude Lock</div>
+                <div class="puzzle-content">
+                     <p>Where My Girls At?</p>
+                    <p>Count the circles and multiply them by the road number.</p>
+                    <p>31.623628, 6.277025</p>
+                    <p>Count the circles and multiply them by the road number.</p>
+                    <p>30.720897, 6.460114</p>
+                    <p>Then add the two numbers</p>
+                    <p>multiply the length of the Chaplin code with the number to unlock the next puzzle.</p>
+                    <p>chaplin Code :</p>
+                    <p>--.. --.. --- -.-- -.-- -... -..- -..- .-.. .-- .-- .. .- .- ...- -... -... .. -.-. -.-. --- -.. -.. -. . .</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-6" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+            
+            <!-- Puzzle 7 -->
+            <div class="puzzle locked" id="puzzle-7">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #07 (4py7bHo)</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">Sic Mundus Creatus Est</div>
+                <div class="puzzle-content">
+                    <p>Carefully listen to the audio.</p>
+                    <p>https://drive.google.com/file/d/1GjPSnFnhy15Ii3T60l5duxJeKLM7UR0Y/view?usp=sharing</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-7" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+            
+            <!-- Puzzle 8 -->
+            <div class="puzzle locked" id="puzzle-8">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #08 (TWnUxej)</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">cicada 3301 (yek=chaplincode)</div>
+                <div class="puzzle-content">
+                    <p></p>
+                    <p>“TIBERIVS CLAVDIVS CAESAR says:</p>
+                    <p>[gztglvtgahrv]</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-8" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+            
+            <!-- Puzzle 9 -->
+            <div class="puzzle locked" id="puzzle-9">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #09 (yX0Ss1C )</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">Hurry</div>
+                <div class="puzzle-content">
+                    <p>https://logwork.com/countdown-dy3z</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-9" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+            
+            <!-- Puzzle 10 -->
+            <div class="puzzle locked" id="puzzle-10">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #10 (qFMa5/a)</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">The Final Cipher</div>
+                <div class="puzzle-content">
+                    <p>final code</p>
+                    <p>.--. .- .-. .- -.. --- -..-</p>
+                    <p>Solve the Riddle</p>
+                    <p>I scream you scream we all scream for ________</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-10" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+            
+            <!-- Puzzle 11 -->
+            <div class="puzzle locked" id="puzzle-11">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #11 (njb?zxu)</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">Master Decryption</div>
+                <div class="puzzle-content">
+                    <p>The answer to the code is to add all the first letters or numbers of the puzzle from 1 to 10 to solve it.</p>
+                    <p>Bonus:</p>
+
+                    <p></p>
+                    <p> the Chaplin code     = 'Resilience'</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-11" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+            
+            <!-- NEW Puzzle 12 (Final Challenge) -->
+            <div class="puzzle locked" id="puzzle-12">
+                <div class="puzzle-header">
+                    <div class="puzzle-number">PUZZLE #12 (=xmfwnsl)</div>
+                    <div class="puzzle-status">LOCKED</div>
+                </div>
+                <div class="puzzle-title">THE FINAL GATE</div>
+                <div class="puzzle-content">
+                    <p>You've decrypted all previous puzzles, but the asylum has one final defense mechanism.</p>   
+                    <p>Enter the final key to unlock the gates...</p>
+                    <p>open the Link: </p>
+                    <p>https://drive.google.com/file/d/15dMMsAiKJuq1_ooXF3_AhZ8gNttUx1_M/view?usp=sharing</p>
+                    <p>find the password for the pdf</p>
+                    <p>https://cryptii.com/pipes/caesar-cipher</p>
+                    <p>The PDF password length makes sense.</p>
+                    <p>find the pdf</p>
+                </div>
+                <div class="puzzle-input">
+                    <input type="text" id="answer-12" placeholder="Locked..." disabled>
+                    <button disabled>LOCKED</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-content">
+                <p>ASYLUM ESCAPE: DIGITAL ENIGMA &copy; 2025 | Firewall Security Level: MAXIMUM</p>
+                <button class="restart-btn" id="restart-button">
+                    <i class="fas fa-redo"></i> 
+                </button>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Instruction Modal -->
+    <div id="instruction-modal">
+        <div class="instruction-content">
+            <div class="instruction-title">ASYLUM ESCAPE INSTRUCTIONS</div>
+            
+            <div class="instruction-list">
+                <div class="instruction-item">You are trapped in a digital asylum with 12 encrypted puzzles to solve.</div>
+                <div class="instruction-item">Each puzzle must be solved in sequence - solve one to unlock the next.</div>
+                <div class="instruction-item">Enter your answers in the input fields and press DECRYPT to verify.</div>
+                <div class="instruction-item">Correct answers will unlock the next puzzle and add to your score.</div>
+                <div class="instruction-item">Puzzle 11 requires combining first letters of all previous answers.</div>
+                <div class="instruction-item">Puzzle 12 is the final challenge - solve it to escape the asylum.</div>
+                <div class="instruction-item">Use your intellect and logic to solve each cryptic puzzle.</div>
+                <div class="instruction-item">The asylum security system will attempt to block your progress.</div>
+                <div class="instruction-item">Beware of misleading information and red herrings.</div>
+                <div class="instruction-item">The clock is ticking - solve all puzzles before your mind succumbs!</div>
+                <div class="instruction-item">Don't think the decrypt key is the puzzle — it's just a key to the next level. The actual word lies behind the puzzle.</div>
+                <div class="instruction-item">Don't ask the admin for any hints — he's on vacation, hehehe.</div>
+                <div class="instruction-item">And the Chaplin code is a set of 12 words.</div>
+                <div class="instruction-item">"About the Chaplin code — you’ll see he left some blanks to be filled in.
+                            Yeah, it feels just like those English textbooks from our primary school days.
+                            Find the 12 words from the simple puzzle and fill in the blanks!".</div>
+
+
+            </div>
+            
+            <button class="instruction-close" onclick="closeInstructions()">
+                BEGIN ESCAPE ATTEMPT
+            </button>
+        </div>
+    </div>
+    
+    <!-- Confirmation Dialog -->
+    <div id="confirmation-dialog">
+        <div class="dialog-content">
+            <div class="dialog-title">WANNA CRY</div>
+            <div class="dialog-message">
+                Are you sure you want to restart the escape?<br>
+                All progress will be lost!
+            </div>
+            <div class="dialog-buttons">
+                <button class="dialog-btn cancel" onclick="hideConfirmation()">CANCEL</button>
+                <button class="dialog-btn confirm" onclick="restartGame()">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Game state
+        let solvedCount = 0;
+        let progress = 0;
+        
+        // Matrix background effect
+        function createMatrixEffect() {
+            const container = document.getElementById('matrix-bg');
+            const chars = "01abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()";
+            const fontSize = 18;
+            const columns = Math.floor(window.innerWidth / fontSize);
+            
+            for (let i = 0; i < columns; i++) {
+                const char = document.createElement('div');
+                char.classList.add('matrix-char');
+                char.style.left = (i * fontSize) + 'px';
+                char.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                char.style.animationDelay = (Math.random() * 5) + 's';
+                char.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+                container.appendChild(char);
+                
+                // Create more characters for each column
+                const charCount = Math.floor(Math.random() * 10) + 5;
+                for (let j = 1; j < charCount; j++) {
+                    setTimeout(() => {
+                        const nextChar = document.createElement('div');
+                        nextChar.classList.add('matrix-char');
+                        nextChar.style.left = (i * fontSize) + 'px';
+                        nextChar.style.top = (-j * fontSize) + 'px';
+                        nextChar.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                        nextChar.style.animationDelay = (Math.random() * 5) + 's';
+                        nextChar.style.opacity = Math.random() * 0.5 + 0.5;
+                        nextChar.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+                        container.appendChild(nextChar);
+                    }, j * 100);
+                }
+            }
+        }
+        
+        // Create terminal scan lines
+        function createScanLines() {
+            for (let i = 0; i < 5; i++) {
+                const line = document.createElement('div');
+                line.className = 'terminal-line-effect';
+                line.style.top = (Math.random() * 100) + 'vh';
+                line.style.width = (Math.random() * 100 + 300) + 'px';
+                line.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                document.body.appendChild(line);
+            }
+        }
+        
+        // Enhanced confetti effect
+        function fireConfetti() {
+            // Fire from all four corners
+            const corners = [
+                { x: 0, y: 0 },
+                { x: 1, y: 0 },
+                { x: 0, y: 1 },
+                { x: 1, y: 1 }
+            ];
+            
+            // Fire 10 times from different corners
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const origin = corners[i % 4];
+                    confetti({
+                        particleCount: 150,
+                        spread: 100,
+                        origin: origin,
+                        colors: ['#00ff41', '#0fff50', '#ffffff', '#ffdd00', '#ff003c'],
+                        disableForReducedMotion: true
+                    });
+                }, i * 300);
+            }
+        }
+        
+        // Update scoreboard
+        function updateScoreboard() {
+            document.getElementById('score').textContent = solvedCount;
+        }
+        
+        // Check puzzle answer
+        function checkAnswer(puzzleNum) {
+            const answerInput = document.getElementById(`answer-${puzzleNum}`);
+            const answer = answerInput.value.trim().toLowerCase();
+            let isCorrect = false;
+            
+            // Puzzle answers
+            //"Oh, you think you're clever, little one? 
+            // I'm ten steps ahead—this key is just the beginning; 
+            // crack the clues, use your tiny brain… 
+            // bye-bye, and don’t forget your diaper."
+            const answers = {
+                1: 'password',
+                2: 'long',
+                3: '3',
+                4: 'butterfly',
+                5: '104',
+                6: '5616',
+                7: 'dark',
+                8: 'estrangement',
+                9: 'game over',
+                10: 'ice cream',
+                11: 'pl3b15degi', // First letters of all answers
+                12: 'happy' // Final challenge answer
+            };
+            
+            // Check if answer is correct
+            if (answers[puzzleNum] && answer === answers[puzzleNum]) {
+                isCorrect = true;
+                solvedCount++;
+                updateScoreboard();
+                
+                // Show celebration effect
+                const puzzle = document.getElementById(`puzzle-${puzzleNum}`);
+                puzzle.style.boxShadow = '0 0 30px var(--glow)';
+                puzzle.style.transform = 'scale(1.03)';
+                puzzle.querySelector('.puzzle-status').textContent = 'DECRYPTED';
+                puzzle.querySelector('.puzzle-status').style.background = 'rgba(0, 60, 30, 0.6)';
+                
+                // Confetti effect
+                fireConfetti();
+                
+                // Unlock next puzzle
+                if (puzzleNum < 12) {
+                    setTimeout(() => {
+                        const nextPuzzle = document.getElementById(`puzzle-${puzzleNum + 1}`);
+                        nextPuzzle.classList.remove('locked');
+                        nextPuzzle.querySelector('input').disabled = false;
+                        nextPuzzle.querySelector('button').disabled = false;
+                        nextPuzzle.querySelector('input').placeholder = "Enter decryption key...";
+                        nextPuzzle.querySelector('button').textContent = "DECRYPT";
+                        nextPuzzle.querySelector('button').onclick = () => checkAnswer(puzzleNum + 1);
+                        nextPuzzle.querySelector('.puzzle-status').textContent = 'ACTIVE';
+                        
+                        // Highlight effect
+                        nextPuzzle.style.boxShadow = '0 0 30px var(--glow)';
+                        setTimeout(() => {
+                            nextPuzzle.style.boxShadow = '0 0 15px rgba(0, 20, 10, 0.4)';
+                        }, 2000);
+                    }, 1000);
+                } else {
+                    // Final puzzle solved - show success
+                    setTimeout(() => {
+                        // Full screen confetti
+                        document.getElementById('confetti-canvas').style.display = 'block';
+                        fireConfetti();
+                        
+                        // Show success message
+                        const puzzle = document.getElementById(`puzzle-12`);
+                        puzzle.querySelector('.puzzle-title').textContent = 'ASYLUM BREACHED!';
+                        puzzle.querySelector('.puzzle-content').innerHTML = 
+                            '<p style="color: var(--terminal-green); font-size: 1.5rem; text-align: center;">CONGRATULATIONS!</p>' +
+                            '<p>You have successfully escaped the asylum! The digital enigma has been solved.</p>' +
+                            '<p style="margin-top: 1rem; text-align: center;"><i class="fas fa-trophy" style="color: var(--warning-yellow); font-size: 3rem;"></i></p>';
+                        
+                        // Change button to success state
+                        const btn = puzzle.querySelector('button');
+                        btn.textContent =   'ESCAPED!';
+                        btn.style.background = 'rgba(0, 100, 50, 0.9)';
+                        btn.disabled = true;
+                        answerInput.disabled = true;
+                    }, 1000);
+                }
+            } else {
+                // Wrong answer effect
+                answerInput.style.border = '2px solid var(--error-red)';
+                answerInput.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    answerInput.style.border = '1px solid var(--terminal-green)';
+                    answerInput.style.animation = '';
+                }, 500);
+            }
+            
+            // Clear input
+            if (isCorrect) {
+                answerInput.value = '';
+            }
+            
+            return isCorrect;
+        }
+        
+        // Show restart confirmation
+        function showConfirmation() {
+            document.getElementById('confirmation-dialog').classList.add('active');
+        }
+        
+        // Hide restart confirmation
+        function hideConfirmation() {
+            document.getElementById('confirmation-dialog').classList.remove('active');
+        }
+        
+        // Show instructions
+        function showInstructions() {
+            document.getElementById('instruction-modal').classList.add('active');
+        }
+        
+        // Close instructions
+        function closeInstructions() {
+            document.getElementById('instruction-modal').classList.remove('active');
+        }
+        
+        // Restart the game
+        function restartGame() {
+            // Hide modals
+            document.getElementById('confirmation-dialog').classList.remove('active');
+            
+            // Reset game state
+            solvedCount = 0;
+            updateScoreboard();
+            
+            // Reset all puzzles except the first one
+            for (let i = 1; i <= 12; i++) {
+                const puzzle = document.getElementById(`puzzle-${i}`);
+                const input = document.getElementById(`answer-${i}`);
+                const button = puzzle.querySelector('button');
+                
+                if (i === 1) {
+                    puzzle.classList.remove('locked');
+                    input.disabled = false;
+                    button.disabled = false;
+                    input.placeholder = "Enter decryption key...";
+                    button.textContent = "DECRYPT";
+                    button.onclick = () => checkAnswer(i);
+                    puzzle.querySelector('.puzzle-status').textContent = 'ACTIVE';
+                    puzzle.querySelector('.puzzle-status').style.background = '';
+                    
+                    // Reset puzzle 12 if needed
+                    if (i === 12) {
+                        puzzle.querySelector('.puzzle-title').textContent = 'THE FINAL GATE';
+                        puzzle.querySelector('.puzzle-content').innerHTML = 
+                            '<p>You\'ve decrypted all previous puzzles, but the asylum has one final defense mechanism.</p>' +
+                            '<p>The answer is a five-letter word that represents a state of joy and contentment. It\'s what you\'ll feel when you finally escape. All previous puzzles were preparing you for this moment.</p>' +
+                            '<p>Enter the final key to unlock the gates...</p>';
+                    }
+                } else {
+                    puzzle.classList.add('locked');
+                    input.disabled = true;
+                    button.disabled = true;
+                    input.placeholder = "Locked...";
+                    button.textContent = "LOCKED";
+                    puzzle.querySelector('.puzzle-status').textContent = 'LOCKED';
+                    puzzle.querySelector('.puzzle-status').style.background = '';
+                }
+                
+                input.value = '';
+                puzzle.style.boxShadow = '';
+                puzzle.style.transform = '';
+            }
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create background effects
+            createMatrixEffect();
+            createScanLines();
+            
+            // Simulate loading delay with progress bar
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                }
+                progressBar.style.width = progress + '%';
+                progressText.textContent = Math.round(progress) + '%';
+            }, 150);
+            
+            // After loading, show main content
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        document.getElementById('main-content').style.opacity = '1';
+                    }, 300);
+                }, 1000);
+            }, 5000);
+            
+            // Add CSS for shake animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                    20%, 40%, 60%, 80% { transform: translateX(5px); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Button event listeners
+            document.getElementById('restart-button').addEventListener('click', showConfirmation);
+            document.getElementById('instruction-button').addEventListener('click', showInstructions);
+        });
+        // Add to your existing JavaScript
+function setupMusicToggle() {
+    const musicToggle = document.getElementById('music-toggle');
+    const bgMusic = document.getElementById('bg-music');
+    const icon = musicToggle.querySelector('i');
+    
+    // Try to play music when user first interacts with the page
+    document.addEventListener('click', function initialPlay() {
+        if (bgMusic.paused) {
+            bgMusic.volume = 0.5;
+            bgMusic.play().catch(e => console.log("Autoplay prevented:", e));
+        }
+        document.removeEventListener('click', initialPlay);
+    }, { once: true });
+    
+    // Toggle button functionality
+    musicToggle.addEventListener('click', function() {
+        if (bgMusic.paused) {
+            bgMusic.play();
+            musicToggle.classList.add('playing');
+            icon.classList.remove('fa-play');
+            icon.classList.add('fa-pause');
+        } else {
+            bgMusic.pause();
+            musicToggle.classList.remove('playing');
+            icon.classList.remove('fa-pause');
+            icon.classList.add('fa-play');
+        }
+    });
+}
+
+// Call this in your DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', () => {
+    // ... existing code ...
+    setupMusicToggle(); // Add this line
+});
+    </script>
+</body>
+</html>
