@@ -198,7 +198,7 @@
         
         .header-scoreboard #score {
             font-size: 1.8rem;
-            color: var(--terminal-green);
+            color: var(--warning-yellow); /* CHANGED TO YELLOW */
             font-weight: bold;
             min-width: 40px;
             text-align: center;
@@ -900,6 +900,20 @@
             .final-input-group {
                 flex-direction: column;
             }
+            
+            /* Mobile menu adjustments */
+            .menu-panel {
+                width: 85%;
+                right: -85%;
+            }
+            
+            .menu-button {
+                top: 10px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
         }
         
         @media (max-width: 576px) {
@@ -938,6 +952,13 @@
             .dialog-btn {
                 width: 100%;
             }
+            
+            /* Scoreboard adjustments */
+            .header-scoreboard {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 8px 12px;
+            }
         }
         
         @media (max-width: 400px) {
@@ -954,8 +975,17 @@
                 font-size: 1rem;
             }
             
+            /* Mobile menu adjustments */
             .menu-panel {
-                width: 85%;
+                width: 90%;
+                right: -90%;
+                padding: 60px 15px 15px;
+            }
+            
+            .close-menu {
+                top: 15px;
+                right: 15px;
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -1016,7 +1046,7 @@
             
             <!-- Header Scoreboard -->
             <div class="header-scoreboard">
-                <i class="fas fa-skull"></i>
+                <i class="fas fa-trophy"></i> <!-- Changed from skull to trophy -->
                 <span class="score-label">SOLVED:</span>
                 <span id="score">0</span>
                 <span class="score-label">/ 12</span>
@@ -1328,6 +1358,7 @@
         // Game state
         let solvedCount = 0;
         let progress = 0;
+        const completedPuzzles = new Set(); // Track completed puzzles
         
         // Matrix background effect
         function createMatrixEffect() {
@@ -1407,6 +1438,11 @@
         
         // Check puzzle answer
         function checkAnswer(puzzleNum) {
+            // Prevent multiple submissions for same puzzle
+            if (completedPuzzles.has(puzzleNum)) {
+                return;
+            }
+            
             const answerInput = document.getElementById(`answer-${puzzleNum}`);
             const answer = answerInput.value.trim().toLowerCase();
             let isCorrect = false;
@@ -1431,6 +1467,7 @@
             if (answers[puzzleNum] && answer === answers[puzzleNum]) {
                 isCorrect = true;
                 solvedCount++;
+                completedPuzzles.add(puzzleNum);
                 updateScoreboard();
                 
                 // Show celebration effect
@@ -1439,6 +1476,11 @@
                 puzzle.style.transform = 'scale(1.03)';
                 puzzle.querySelector('.puzzle-status').textContent = 'DECRYPTED';
                 puzzle.querySelector('.puzzle-status').style.background = 'rgba(0, 60, 30, 0.6)';
+                
+                // Disable input and button to prevent multiple submissions
+                answerInput.disabled = true;
+                const button = puzzle.querySelector('button');
+                button.disabled = true;
                 
                 // Confetti effect
                 fireConfetti();
@@ -1529,6 +1571,7 @@
             
             // Reset game state
             solvedCount = 0;
+            completedPuzzles.clear();
             updateScoreboard();
             
             // Reset all puzzles except the first one
