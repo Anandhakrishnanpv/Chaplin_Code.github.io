@@ -623,12 +623,13 @@
             transform: translateY(-2px);
         }
         
-        /* ======== MENU BUTTONS ======== */
-        /* Desktop Menu Button */
-        .desktop-menu-btn {
+        /* ======== MENU SYSTEM ======== */
+        /* Menu button styles */
+        .menu-button {
             position: fixed;
             top: 20px;
             right: 20px;
+            z-index: 500;
             padding: 12px 15px;
             background: rgba(10, 20, 30, 0.8);
             border: 1px solid var(--warning-yellow);
@@ -638,7 +639,6 @@
             cursor: pointer;
             transition: all var(--transition-speed);
             font-size: 1.2rem;
-            z-index: 500;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -646,93 +646,13 @@
             height: 50px;
         }
         
-        .desktop-menu-btn:hover {
+        .menu-button:hover {
             background: rgba(40, 30, 10, 0.9);
             box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
         }
         
-        /* Desktop Navigation */
-        .desktop-nav {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background: rgba(10, 20, 30, 0.98);
-            border: 1px solid var(--terminal-green);
-            border-radius: 8px;
-            box-shadow: 0 0 25px rgba(0, 255, 100, 0.3);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            padding: 15px;
-            min-width: 200px;
-        }
-        
-        .desktop-nav.active {
-            display: flex;
-        }
-        
-        .desktop-nav .instruction-btn,
-        .desktop-nav .music-btn {
-            width: 100%;
-            padding: 12px;
-            margin: 5px 0;
-            background: rgba(5, 15, 25, 0.8);
-            border: 1px solid var(--warning-yellow);
-            border-radius: 6px;
-            text-align: center;
-            font-family: 'Orbitron', sans-serif;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .desktop-nav .instruction-btn:hover,
-        .desktop-nav .music-btn:hover {
-            background: rgba(40, 30, 10, 0.9);
-            box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
-        }
-        
-        .desktop-nav .music-btn.playing {
-            border-color: var(--success-color);
-            color: var(--success-color);
-        }
-        
-        .desktop-nav .music-btn.playing i {
-            color: var(--success-color);
-        }
-        
-        /* Mobile Menu Button */
-        .mobile-menu-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 15px;
-            background: rgba(10, 20, 30, 0.8);
-            border: 1px solid var(--warning-yellow);
-            border-radius: 6px;
-            color: var(--text-color);
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-            font-size: 1.2rem;
-            z-index: 500;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-        }
-        
-        .mobile-menu-btn:hover {
-            background: rgba(40, 30, 10, 0.9);
-            box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
-        }
-        
-        /* Mobile Navigation */
-        .mobile-nav {
+        /* Menu panel */
+        .menu-panel {
             position: fixed;
             top: 0;
             right: -300px;
@@ -749,7 +669,7 @@
             overflow-y: auto;
         }
         
-        .mobile-nav.active {
+        .menu-panel.active {
             right: 0;
         }
         
@@ -765,8 +685,7 @@
             z-index: 1001;
         }
         
-        .mobile-nav .instruction-btn,
-        .mobile-nav .music-btn {
+        .menu-btn {
             width: 100%;
             padding: 15px;
             margin: 10px 0;
@@ -783,22 +702,20 @@
             transition: all 0.3s ease;
         }
         
-        .mobile-nav .instruction-btn:hover,
-        .mobile-nav .music-btn:hover {
+        .menu-btn:hover {
             background: rgba(40, 30, 10, 0.9);
             box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
         }
         
-        .mobile-nav .music-btn.playing {
+        .menu-btn.playing {
             border-color: var(--success-color);
             color: var(--success-color);
         }
         
-        .mobile-nav .music-btn.playing i {
+        .menu-btn.playing i {
             color: var(--success-color);
         }
         
-        /* Menu Overlay */
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -983,19 +900,6 @@
             .final-input-group {
                 flex-direction: column;
             }
-            
-            /* Show mobile menu button and hide desktop menu button */
-            .mobile-menu-btn {
-                display: flex;
-            }
-            
-            .desktop-menu-btn {
-                display: none;
-            }
-            
-            .desktop-nav {
-                display: none !important;
-            }
         }
         
         @media (max-width: 576px) {
@@ -1034,15 +938,6 @@
             .dialog-btn {
                 width: 100%;
             }
-            
-            .mobile-menu-btn {
-                top: 10px;
-                right: 10px;
-                padding: 8px 10px;
-                font-size: 1rem;
-                width: 45px;
-                height: 45px;
-            }
         }
         
         @media (max-width: 400px) {
@@ -1059,7 +954,7 @@
                 font-size: 1rem;
             }
             
-            .mobile-nav {
+            .menu-panel {
                 width: 85%;
             }
         }
@@ -1069,29 +964,16 @@
     <!-- Matrix Background -->
     <div id="matrix-bg"></div>
     
-    <!-- Desktop Menu Button -->
-    <button class="desktop-menu-btn" id="desktop-menu-btn">☰</button>
+    <!-- Menu System -->
+    <button class="menu-button" id="menu-button">☰</button>
     
-    <!-- Desktop Navigation -->
-    <div class="desktop-nav" id="desktop-nav">
-        <button class="instruction-btn" id="desktop-instruction-button">
-            <i class="fas fa-info-circle"></i> INSTRUCTIONS
-        </button>
-        <button id="desktop-music-toggle" class="music-btn">
-            <i class="fas fa-play"></i> MUSIC
-        </button>
-    </div>
-    
-    <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
-    
-    <!-- Mobile Navigation -->
-    <div class="mobile-nav" id="mobile-nav">
+    <!-- Menu Panel -->
+    <div class="menu-panel" id="menu-panel">
         <button class="close-menu" id="close-menu">✕</button>
-        <button class="instruction-btn" id="mobile-instruction-button">
+        <button class="menu-btn" id="instruction-button">
             <i class="fas fa-info-circle"></i> INSTRUCTIONS
         </button>
-        <button id="mobile-music-toggle" class="music-btn">
+        <button id="music-toggle" class="menu-btn">
             <i class="fas fa-play"></i> MUSIC
         </button>
     </div>
@@ -1416,7 +1298,7 @@
                 <div class="instruction-item">Don't think the decrypt key is the puzzle — it's just a key to the next level. The actual word lies behind the puzzle.</div>
                 <div class="instruction-item">Don't ask the admin for any hints — he's on vacation, hehehe.</div>
                 <div class="instruction-item">And the Chaplin code is a set of 12 words.</div>
-                <div class="instruction-item">"About the Chaplin code — you'll see he left some blanks to be filled in.
+                <div class="instruction-item">"About the Chaplin code — you’ll see he left some blanks to be filled in.
                             Yeah, it feels just like those English textbooks from our primary school days.
                             Find the 12 words from the simple puzzle and fill in the blanks!".</div>
             </div>
@@ -1696,48 +1578,36 @@
         
         // Setup music toggle
         function setupMusicToggle() {
-            const mobileMusicToggle = document.getElementById('mobile-music-toggle');
-            const desktopMusicToggle = document.getElementById('desktop-music-toggle');
+            const musicToggle = document.getElementById('music-toggle');
             const bgMusic = document.getElementById('bg-music');
-            const mobileIcon = mobileMusicToggle.querySelector('i');
-            const desktopIcon = desktopMusicToggle.querySelector('i');
+            const icon = musicToggle.querySelector('i');
             
             // Function to toggle music
             const toggleMusic = function() {
                 if (bgMusic.paused) {
                     bgMusic.play();
-                    mobileMusicToggle.classList.add('playing');
-                    desktopMusicToggle.classList.add('playing');
-                    mobileIcon.classList.remove('fa-play');
-                    mobileIcon.classList.add('fa-pause');
-                    desktopIcon.classList.remove('fa-play');
-                    desktopIcon.classList.add('fa-pause');
+                    musicToggle.classList.add('playing');
+                    icon.classList.remove('fa-play');
+                    icon.classList.add('fa-pause');
                 } else {
                     bgMusic.pause();
-                    mobileMusicToggle.classList.remove('playing');
-                    desktopMusicToggle.classList.remove('playing');
-                    mobileIcon.classList.remove('fa-pause');
-                    mobileIcon.classList.add('fa-play');
-                    desktopIcon.classList.remove('fa-pause');
-                    desktopIcon.classList.add('fa-play');
+                    musicToggle.classList.remove('playing');
+                    icon.classList.remove('fa-pause');
+                    icon.classList.add('fa-play');
                 }
             };
             
-            // Add event listeners
-            mobileMusicToggle.addEventListener('click', toggleMusic);
-            desktopMusicToggle.addEventListener('click', toggleMusic);
+            // Add event listener
+            musicToggle.addEventListener('click', toggleMusic);
             
             // Try to play music when user first interacts with the page
             document.addEventListener('click', function initialPlay() {
                 if (bgMusic.paused) {
                     bgMusic.volume = 0.5;
                     bgMusic.play().catch(e => console.log("Autoplay prevented:", e));
-                    mobileMusicToggle.classList.add('playing');
-                    desktopMusicToggle.classList.add('playing');
-                    mobileIcon.classList.remove('fa-play');
-                    mobileIcon.classList.add('fa-pause');
-                    desktopIcon.classList.remove('fa-play');
-                    desktopIcon.classList.add('fa-pause');
+                    musicToggle.classList.add('playing');
+                    icon.classList.remove('fa-play');
+                    icon.classList.add('fa-pause');
                 }
                 document.removeEventListener('click', initialPlay);
             }, { once: true });
@@ -1790,47 +1660,36 @@
             
             // Button event listeners
             document.getElementById('restart-button').addEventListener('click', showConfirmation);
-            
-            // Instruction buttons
-            document.getElementById('mobile-instruction-button').addEventListener('click', showInstructions);
-            document.getElementById('desktop-instruction-button').addEventListener('click', showInstructions);
+            document.getElementById('instruction-button').addEventListener('click', showInstructions);
             
             // Menu functionality
-            const desktopMenuBtn = document.getElementById('desktop-menu-btn');
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const desktopNav = document.getElementById('desktop-nav');
-            const mobileNav = document.getElementById('mobile-nav');
+            const menuButton = document.getElementById('menu-button');
+            const menuPanel = document.getElementById('menu-panel');
             const closeMenu = document.getElementById('close-menu');
             const menuOverlay = document.getElementById('menu-overlay');
             
-            // Toggle desktop menu
-            desktopMenuBtn.addEventListener('click', () => {
-                desktopNav.classList.toggle('active');
-            });
-            
-            // Toggle mobile menu
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileNav.classList.add('active');
+            // Toggle menu
+            menuButton.addEventListener('click', () => {
+                menuPanel.classList.add('active');
                 menuOverlay.classList.add('active');
             });
             
-            // Close mobile menu
+            // Close menu
             closeMenu.addEventListener('click', () => {
-                mobileNav.classList.remove('active');
+                menuPanel.classList.remove('active');
                 menuOverlay.classList.remove('active');
             });
             
             // Close menu when clicking outside
             menuOverlay.addEventListener('click', () => {
-                mobileNav.classList.remove('active');
+                menuPanel.classList.remove('active');
                 menuOverlay.classList.remove('active');
             });
             
-            // Close desktop menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!desktopMenuBtn.contains(e.target) && !desktopNav.contains(e.target)) {
-                    desktopNav.classList.remove('active');
-                }
+            // Close menu when clicking instruction button
+            document.getElementById('instruction-button').addEventListener('click', () => {
+                menuPanel.classList.remove('active');
+                menuOverlay.classList.remove('active');
             });
             
             // Setup music toggle
