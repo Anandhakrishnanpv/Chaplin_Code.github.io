@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chaplin_Code</title>
+    <title>Chaplin_Code - Responsive</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -50,9 +50,9 @@
             z-index: -2;
             opacity: 0.3;
         }
-                /* Add to your header style */
+        
         header {
-            position: relative; /* Add this */
+            position: relative;
             /* ... existing styles ... */
         }
         
@@ -623,12 +623,13 @@
             transform: translateY(-2px);
         }
         
-        /* ======== INSTRUCTION BUTTON ======== */
-        .instruction-btn {
+        /* ======== MENU BUTTONS ======== */
+        /* Desktop Menu Button */
+        .desktop-menu-btn {
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 12px 20px;
+            padding: 12px 15px;
             background: rgba(10, 20, 30, 0.8);
             border: 1px solid var(--warning-yellow);
             border-radius: 6px;
@@ -636,17 +637,181 @@
             font-family: 'Orbitron', sans-serif;
             cursor: pointer;
             transition: all var(--transition-speed);
+            font-size: 1.2rem;
             z-index: 500;
-            font-size: 1rem;
-            letter-spacing: 1px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
         }
         
-        .instruction-btn:hover {
+        .desktop-menu-btn:hover {
             background: rgba(40, 30, 10, 0.9);
             box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
+        }
+        
+        /* Desktop Navigation */
+        .desktop-nav {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(10, 20, 30, 0.98);
+            border: 1px solid var(--terminal-green);
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(0, 255, 100, 0.3);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            padding: 15px;
+            min-width: 200px;
+        }
+        
+        .desktop-nav.active {
+            display: flex;
+        }
+        
+        .desktop-nav .instruction-btn,
+        .desktop-nav .music-btn {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            background: rgba(5, 15, 25, 0.8);
+            border: 1px solid var(--warning-yellow);
+            border-radius: 6px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .desktop-nav .instruction-btn:hover,
+        .desktop-nav .music-btn:hover {
+            background: rgba(40, 30, 10, 0.9);
+            box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
+        }
+        
+        .desktop-nav .music-btn.playing {
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+        
+        .desktop-nav .music-btn.playing i {
+            color: var(--success-color);
+        }
+        
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 15px;
+            background: rgba(10, 20, 30, 0.8);
+            border: 1px solid var(--warning-yellow);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-size: 1.2rem;
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+        
+        .mobile-menu-btn:hover {
+            background: rgba(40, 30, 10, 0.9);
+            box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background: rgba(10, 20, 30, 0.98);
+            border-left: 1px solid var(--terminal-green);
+            box-shadow: -5px 0 25px rgba(0, 255, 100, 0.3);
+            z-index: 1000;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 70px 20px 20px;
+            overflow-y: auto;
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+        }
+        
+        .close-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--terminal-green);
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .mobile-nav .instruction-btn,
+        .mobile-nav .music-btn {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(5, 15, 25, 0.8);
+            border: 1px solid var(--warning-yellow);
+            border-radius: 6px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-nav .instruction-btn:hover,
+        .mobile-nav .music-btn:hover {
+            background: rgba(40, 30, 10, 0.9);
+            box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
+        }
+        
+        .mobile-nav .music-btn.playing {
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+        
+        .mobile-nav .music-btn.playing i {
+            color: var(--success-color);
+        }
+        
+        /* Menu Overlay */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
+        }
+        
+        .menu-overlay.active {
+            display: block;
         }
         
         /* ======== CONFIRMATION DIALOG ======== */
@@ -728,40 +893,6 @@
         .dialog-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        /* Add to your CSS */
-        .music-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 12px 20px;
-            background: rgba(10, 20, 30, 0.8);
-            border: 1px solid var(--warning-yellow);
-            border-radius: 6px;
-            color: var(--text-color);
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-            z-index: 500;
-            font-size: 1rem;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .music-btn:hover {
-            background: rgba(40, 30, 10, 0.9);
-            box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
-        }
-
-        .music-btn.playing {
-            border-color: var(--success-color);
-            color: var(--success-color);
-        }
-
-        .music-btn.playing i {
-            color: var(--success-color);
         }
         
         /* ======== ANIMATIONS ======== */
@@ -852,6 +983,19 @@
             .final-input-group {
                 flex-direction: column;
             }
+            
+            /* Show mobile menu button and hide desktop menu button */
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .desktop-menu-btn {
+                display: none;
+            }
+            
+            .desktop-nav {
+                display: none !important;
+            }
         }
         
         @media (max-width: 576px) {
@@ -891,11 +1035,13 @@
                 width: 100%;
             }
             
-            .instruction-btn {
+            .mobile-menu-btn {
                 top: 10px;
                 right: 10px;
-                padding: 8px 15px;
-                font-size: 0.9rem;
+                padding: 8px 10px;
+                font-size: 1rem;
+                width: 45px;
+                height: 45px;
             }
         }
         
@@ -912,6 +1058,10 @@
             .puzzle-content {
                 font-size: 1rem;
             }
+            
+            .mobile-nav {
+                width: 85%;
+            }
         }
     </style>
 </head>
@@ -919,14 +1069,39 @@
     <!-- Matrix Background -->
     <div id="matrix-bg"></div>
     
-    <!-- Instruction Button -->
-    <button class="instruction-btn" id="instruction-button">
-        <i class="fas fa-info-circle"></i> INSTRUCTIONS
-    </button>
+    <!-- Desktop Menu Button -->
+    <button class="desktop-menu-btn" id="desktop-menu-btn">☰</button>
+    
+    <!-- Desktop Navigation -->
+    <div class="desktop-nav" id="desktop-nav">
+        <button class="instruction-btn" id="desktop-instruction-button">
+            <i class="fas fa-info-circle"></i> INSTRUCTIONS
+        </button>
+        <button id="desktop-music-toggle" class="music-btn">
+            <i class="fas fa-play"></i> MUSIC
+        </button>
+    </div>
+    
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+    
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobile-nav">
+        <button class="close-menu" id="close-menu">✕</button>
+        <button class="instruction-btn" id="mobile-instruction-button">
+            <i class="fas fa-info-circle"></i> INSTRUCTIONS
+        </button>
+        <button id="mobile-music-toggle" class="music-btn">
+            <i class="fas fa-play"></i> MUSIC
+        </button>
+    </div>
+    
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menu-overlay"></div>
 
     <audio id="bg-music" loop>
-    <source src="./music/The Last Masquerade.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
+        <source src="./music/The Last Masquerade.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
     </audio>
     
     <!-- Cyber Loader -->
@@ -958,10 +1133,6 @@
             <div class="subtitle">"A __________ __________ of __________ and __________, a __________ fading into __________; a __________ of __________ by a __________, wrapped in __________, __________, and __________."</div>
             
             <!-- Header Scoreboard -->
-             <!-- Add this inside your header element, after the subtitle -->
-                <button id="music-toggle" class="music-btn">
-                    <i class="fas fa-play"></i> MUSIC
-                </button>
             <div class="header-scoreboard">
                 <i class="fas fa-skull"></i>
                 <span class="score-label">SOLVED:</span>
@@ -981,23 +1152,23 @@
                 <div class="puzzle-content">
                     <p>Username: "theencryptedmessage""</p>
                     <p>>> open the Coded Pad</p>
-                      <p>>> Access to the next chamber is encrypted.</p>
-                      <p>>> You must solve the following riddle to retrieve the PASSWORD:</p>
-                      <p>I live in the shadows, </p>
-                      <p>I break with the key, </p>
-                      <p>I'm what protects  </p>
-                      <p>Your identity. </p>
-                      <p>Crack me if you dare...</p>
-                      <p>>> What am I?</p>
+                    <p>>> Access to the next chamber is encrypted.</p>
+                    <p>>> You must solve the following riddle to retrieve the PASSWORD:</p>
+                    <p>I live in the shadows, </p>
+                    <p>I break with the key, </p>
+                    <p>I'm what protects  </p>
+                    <p>Your identity. </p>
+                    <p>Crack me if you dare...</p>
+                    <p>>> What am I?</p>
 
-                      <p>>> Note:</p>
-                      <p>>> The decryption is *only* the key to move forward...</p>
-                      <p>>> The true answer lies buried in the puzzle.</p>
-                      <p>>> It is not the key... but the *meaning* behind it.</p>
-                      <p>>> This is what we call... the *Chaplin Code*.</p>
-                      <p>Your ultimate aim is to decode the Chaplin Code, which is the combination of all 12 puzzles. and complete the sentance</p>
-                      <p>>> All the best, Operative.</p>
-                      <p>>> Initiating cognitive breach...</p>
+                    <p>>> Note:</p>
+                    <p>>> The decryption is *only* the key to move forward...</p>
+                    <p>>> The true answer lies buried in the puzzle.</p>
+                    <p>>> It is not the key... but the *meaning* behind it.</p>
+                    <p>>> This is what we call... the *Chaplin Code*.</p>
+                    <p>Your ultimate aim is to decode the Chaplin Code, which is the combination of all 12 puzzles. and complete the sentance</p>
+                    <p>>> All the best, Operative.</p>
+                    <p>>> Initiating cognitive breach...</p>
                 </div>
                 <div class="puzzle-input">
                     <input type="text" id="answer-1" placeholder="Enter decryption key...">
@@ -1016,7 +1187,6 @@
                     <p>What word becomes shorter when you add two letters to it, even though its length increases?.</p>
                     <p>solve</p>
                     <p>open: https://drive.google.com/file/d/1qX1OMffLEXGo74MMHK83g9mF9Xc5Jmrf/view?usp=sharing</p>
-
                 </div>
                 <div class="puzzle-input">
                     <input type="text" id="answer-2" placeholder="Locked..." disabled>
@@ -1246,11 +1416,9 @@
                 <div class="instruction-item">Don't think the decrypt key is the puzzle — it's just a key to the next level. The actual word lies behind the puzzle.</div>
                 <div class="instruction-item">Don't ask the admin for any hints — he's on vacation, hehehe.</div>
                 <div class="instruction-item">And the Chaplin code is a set of 12 words.</div>
-                <div class="instruction-item">"About the Chaplin code — you’ll see he left some blanks to be filled in.
+                <div class="instruction-item">"About the Chaplin code — you'll see he left some blanks to be filled in.
                             Yeah, it feels just like those English textbooks from our primary school days.
                             Find the 12 words from the simple puzzle and fill in the blanks!".</div>
-
-
             </div>
             
             <button class="instruction-close" onclick="closeInstructions()">
@@ -1362,10 +1530,6 @@
             let isCorrect = false;
             
             // Puzzle answers
-            //"Oh, you think you're clever, little one? 
-            // I'm ten steps ahead—this key is just the beginning; 
-            // crack the clues, use your tiny brain… 
-            // bye-bye, and don’t forget your diaper."
             const answers = {
                 1: 'password',
                 2: 'long',
@@ -1506,8 +1670,13 @@
                         puzzle.querySelector('.puzzle-title').textContent = 'THE FINAL GATE';
                         puzzle.querySelector('.puzzle-content').innerHTML = 
                             '<p>You\'ve decrypted all previous puzzles, but the asylum has one final defense mechanism.</p>' +
-                            '<p>The answer is a five-letter word that represents a state of joy and contentment. It\'s what you\'ll feel when you finally escape. All previous puzzles were preparing you for this moment.</p>' +
-                            '<p>Enter the final key to unlock the gates...</p>';
+                            '<p>Enter the final key to unlock the gates...</p>' +
+                            '<p>open the Link: </p>' +
+                            '<p>https://drive.google.com/file/d/15dMMsAiKJuq1_ooXF3_AhZ8gNttUx1_M/view?usp=sharing</p>' +
+                            '<p>find the password for the pdf</p>' +
+                            '<p>https://cryptii.com/pipes/caesar-cipher</p>' +
+                            '<p>The PDF password length makes sense.</p>' +
+                            '<p>find the pdf</p>';
                     }
                 } else {
                     puzzle.classList.add('locked');
@@ -1523,6 +1692,55 @@
                 puzzle.style.boxShadow = '';
                 puzzle.style.transform = '';
             }
+        }
+        
+        // Setup music toggle
+        function setupMusicToggle() {
+            const mobileMusicToggle = document.getElementById('mobile-music-toggle');
+            const desktopMusicToggle = document.getElementById('desktop-music-toggle');
+            const bgMusic = document.getElementById('bg-music');
+            const mobileIcon = mobileMusicToggle.querySelector('i');
+            const desktopIcon = desktopMusicToggle.querySelector('i');
+            
+            // Function to toggle music
+            const toggleMusic = function() {
+                if (bgMusic.paused) {
+                    bgMusic.play();
+                    mobileMusicToggle.classList.add('playing');
+                    desktopMusicToggle.classList.add('playing');
+                    mobileIcon.classList.remove('fa-play');
+                    mobileIcon.classList.add('fa-pause');
+                    desktopIcon.classList.remove('fa-play');
+                    desktopIcon.classList.add('fa-pause');
+                } else {
+                    bgMusic.pause();
+                    mobileMusicToggle.classList.remove('playing');
+                    desktopMusicToggle.classList.remove('playing');
+                    mobileIcon.classList.remove('fa-pause');
+                    mobileIcon.classList.add('fa-play');
+                    desktopIcon.classList.remove('fa-pause');
+                    desktopIcon.classList.add('fa-play');
+                }
+            };
+            
+            // Add event listeners
+            mobileMusicToggle.addEventListener('click', toggleMusic);
+            desktopMusicToggle.addEventListener('click', toggleMusic);
+            
+            // Try to play music when user first interacts with the page
+            document.addEventListener('click', function initialPlay() {
+                if (bgMusic.paused) {
+                    bgMusic.volume = 0.5;
+                    bgMusic.play().catch(e => console.log("Autoplay prevented:", e));
+                    mobileMusicToggle.classList.add('playing');
+                    desktopMusicToggle.classList.add('playing');
+                    mobileIcon.classList.remove('fa-play');
+                    mobileIcon.classList.add('fa-pause');
+                    desktopIcon.classList.remove('fa-play');
+                    desktopIcon.classList.add('fa-pause');
+                }
+                document.removeEventListener('click', initialPlay);
+            }, { once: true });
         }
         
         // Initialize the page
@@ -1572,44 +1790,52 @@
             
             // Button event listeners
             document.getElementById('restart-button').addEventListener('click', showConfirmation);
-            document.getElementById('instruction-button').addEventListener('click', showInstructions);
+            
+            // Instruction buttons
+            document.getElementById('mobile-instruction-button').addEventListener('click', showInstructions);
+            document.getElementById('desktop-instruction-button').addEventListener('click', showInstructions);
+            
+            // Menu functionality
+            const desktopMenuBtn = document.getElementById('desktop-menu-btn');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const desktopNav = document.getElementById('desktop-nav');
+            const mobileNav = document.getElementById('mobile-nav');
+            const closeMenu = document.getElementById('close-menu');
+            const menuOverlay = document.getElementById('menu-overlay');
+            
+            // Toggle desktop menu
+            desktopMenuBtn.addEventListener('click', () => {
+                desktopNav.classList.toggle('active');
+            });
+            
+            // Toggle mobile menu
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileNav.classList.add('active');
+                menuOverlay.classList.add('active');
+            });
+            
+            // Close mobile menu
+            closeMenu.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+                menuOverlay.classList.remove('active');
+            });
+            
+            // Close menu when clicking outside
+            menuOverlay.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+                menuOverlay.classList.remove('active');
+            });
+            
+            // Close desktop menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!desktopMenuBtn.contains(e.target) && !desktopNav.contains(e.target)) {
+                    desktopNav.classList.remove('active');
+                }
+            });
+            
+            // Setup music toggle
+            setupMusicToggle();
         });
-        // Add to your existing JavaScript
-function setupMusicToggle() {
-    const musicToggle = document.getElementById('music-toggle');
-    const bgMusic = document.getElementById('bg-music');
-    const icon = musicToggle.querySelector('i');
-    
-    // Try to play music when user first interacts with the page
-    document.addEventListener('click', function initialPlay() {
-        if (bgMusic.paused) {
-            bgMusic.volume = 0.5;
-            bgMusic.play().catch(e => console.log("Autoplay prevented:", e));
-        }
-        document.removeEventListener('click', initialPlay);
-    }, { once: true });
-    
-    // Toggle button functionality
-    musicToggle.addEventListener('click', function() {
-        if (bgMusic.paused) {
-            bgMusic.play();
-            musicToggle.classList.add('playing');
-            icon.classList.remove('fa-play');
-            icon.classList.add('fa-pause');
-        } else {
-            bgMusic.pause();
-            musicToggle.classList.remove('playing');
-            icon.classList.remove('fa-pause');
-            icon.classList.add('fa-play');
-        }
-    });
-}
-
-// Call this in your DOMContentLoaded event
-document.addEventListener('DOMContentLoaded', () => {
-    // ... existing code ...
-    setupMusicToggle(); // Add this line
-});
     </script>
 </body>
 </html>
